@@ -194,4 +194,8 @@ def generate_search_prompt(topic: str, num_papers: int = 5) -> str:
 
 if __name__ == "__main__":
     # Initialize and run the server
-    mcp.run(transport="sse")
+    # 1. Get the port from Render's environment variable (default to 8000 for local testing)
+    port = int(os.environ.get("PORT", 8001))
+
+    # 2. Run the server bound to 0.0.0.0 so Render can "see" it
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
