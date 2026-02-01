@@ -6,8 +6,12 @@ from mcp.server.fastmcp import FastMCP
 
 PAPER_DIR = "papers"
 
+# Get port from environment variable (for Render.com) or default to 8001
+PORT = int(os.getenv("PORT", 8001))
+
 # Initialize FastMCP server
-mcp = FastMCP("research", port=8001)
+# Use 0.0.0.0 to bind to all interfaces (required for Render.com)
+mcp = FastMCP("research", host="0.0.0.0", port=PORT)
 
 
 @mcp.tool()
@@ -194,8 +198,4 @@ def generate_search_prompt(topic: str, num_papers: int = 5) -> str:
 
 if __name__ == "__main__":
     # Initialize and run the server
-    # 1. Get the port from Render's environment variable (default to 8000 for local testing)
-    port = int(os.environ.get("PORT", 8001))
-
-    # 2. Run the server bound to 0.0.0.0 so Render can "see" it
-    mcp.run(transport="sse", host="0.0.0.0", port=port)
+    mcp.run(transport="sse")
